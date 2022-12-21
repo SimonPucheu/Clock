@@ -86,13 +86,18 @@ bool starck[10][5][5] =
 Screen::Screen(int TFT_CS, int TFT_DC, int TFT_RST)
 {
     screen = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-    defaultStyle["background"]["color"]["hex"]["24"] = "000000";
-    defaultStyle["number"]["color"]["hex"]["24"] = "ff0000";
-    defaultStyle["number"]["size"] = 60;
-    defaultStyle["margin"]["left"] = 0;
-    defaultStyle["margin"]["top"] = 16;
-    defaultStyle["padding"] = 8;
-    style = defaultStyle;
+    template["background"]["color"]["hex"]["24"] = true;
+    template["number"]["color"]["hex"]["24"] = true;
+    template["number"]["size"] = true;
+    template["margin"]["left"] = true;
+    template["margin"]["top"] = true;
+    template["padding"] = true;
+    style["background"]["color"]["hex"]["24"] = "000000";
+    style["number"]["color"]["hex"]["24"] = "ffff00";
+    style["number"]["size"] = 60;
+    style["margin"]["left"] = 0;
+    style["margin"]["top"] = 16;
+    style["padding"] = 8;
 }
 
 void Screen::setup()
