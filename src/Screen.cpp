@@ -128,10 +128,10 @@ void Screen::drawTime(int hours = 0, int minutes = 0)
     int numbersList[2][2] = {{0, 0}, {0, 0}};
     numbersList[0][1] = hours % 10;
     if (hours >= 10)
-        numbersList[0][0] = ceil(hours / 10);
+        numbersList[0][0] = floor(hours / 10);
     numbersList[1][1] = minutes % 10;
     if (minutes >= 10)
-        numbersList[1][0] = ceil(minutes / 10);
+        numbersList[1][0] = floor(minutes / 10);
     for (int y = 0; y < 2; y++)
     {
         for (int x = 0; x < 2; x++)
