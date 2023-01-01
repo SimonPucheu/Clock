@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-#include "Screen.h"
+#include "Clock.h"
 
 bool starck[10][5][5] =
     {
@@ -83,30 +83,30 @@ bool starck[10][5][5] =
          {0, 0, 0, 0, 1},
          {1, 1, 1, 1, 1}}};
 
-Screen::Screen(int TFT_CS, int TFT_DC, int TFT_RST)
+Clock::Clock(int TFT_CS, int TFT_DC, int TFT_RST)
 {
     screen = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-    defaultStyle["background"]["color"]["hex"]["24"] = true;
-    defaultStyle["number"]["color"]["hex"]["24"] = true;
-    defaultStyle["number"]["size"] = true;
-    defaultStyle["margin"]["left"] = true;
-    defaultStyle["margin"]["top"] = true;
-    defaultStyle["padding"] = true;
+    filtrer["background"]["color"]["hex"]["24"] = true;
+    filtrer["number"]["color"]["hex"]["24"] = true;
+    filtrer["number"]["size"] = true;
+    filtrer["margin"]["left"] = true;
+    filtrer["margin"]["top"] = true;
+    filtrer["padding"] = true;
     style["background"]["color"]["hex"]["24"] = "000000";
     style["number"]["color"]["hex"]["24"] = "ffff00";
     style["number"]["size"] = 60;
     style["margin"]["left"] = 0;
     style["margin"]["top"] = 16;
     style["padding"] = 8;
+    style["landscape"] = true;
 }
 
-void Screen::setup()
+void Clock::setup()
 {
     screen.initR(INITR_BLACKTAB);
-    screen.fillScreen(ST7735_BLACK);
 }
 
-void Screen::drawNumber(int x, int y, int w, int h, int number = 0)
+void Clock::drawNumber(int x, int y, int w, int h, int number = 0)
 {
     for (int cy = y; cy < (y + h); cy += (h / 5))
     {
@@ -120,8 +120,9 @@ void Screen::drawNumber(int x, int y, int w, int h, int number = 0)
     }
 }
 
-void Screen::drawTime(int hours = 0, int minutes = 0)
+void Clock::drawTime(int hours = 0, int minutes = 0)
 {
+    screen.setRotation(135 * style["landscape"].as<int>());
     calculColor("background");
     calculColor("number");
     screen.fillScreen(style["background"]["color"]["hex"]["16"].as<uint16_t>());
@@ -139,12 +140,12 @@ void Screen::drawTime(int hours = 0, int minutes = 0)
             int X = (x * (style["number"]["size"].as<int>() + style["padding"].as<int>())) + style["margin"]["left"].as<int>();
             int Y = (y * (style["number"]["size"].as<int>() + style["padding"].as<int>())) + style["margin"]["top"].as<int>();
             int size = style["number"]["size"].as<int>();
-            drawNumber(X, Y, size, size, numbersList[y][x]);
+            style["landscape"].as<bool>() ? drawNumber(Y, X, size, size, numbersList[x][y]) : drawNumber(X, Y, size, size, numbersList[y][x]);
         }
     }
 }
 
-void Screen::calculColor(String str)
+void Clock::calculColor(String str)
 {
     if (!style[str]["color"]["hex"]["16"])
     {
@@ -155,7 +156,7 @@ void Screen::calculColor(String str)
                 style[str]["color"]["hex"]["24"] = "ff0000";
             }
             int r, g, b;
-            hexToRGB(style[str]["color"]["hex"]["24"].as<char *>(), r, g, b);
+            hexToRgb(style[str]["color"]["hex"]["24"].as<char *>(), r, g, b);
             style[str]["color"]["rgb"][0] = r;
             style[str]["color"]["rgb"][1] = g;
             style[str]["color"]["rgb"][2] = b;
@@ -164,7 +165,7 @@ void Screen::calculColor(String str)
     }
 }
 
-void hexToRGB(char *hex, int &r, int &g, int &b)
+void hexToRgb(char *hex, int &r, int &g, int &b)
 {
     sscanf(hex, "%02x%02x%02x", &r, &g, &b);
 }
