@@ -108,13 +108,15 @@ void Clock::setup()
 
 void Clock::drawNumber(int x, int y, int w, int h, int number = 0)
 {
+    Serial.println(style["number"]["color"]["hex"]["16"].as<uint16_t>());
     for (int cy = y; cy < (y + h); cy += (h / 5))
     {
         for (int cx = x; cx < (x + w); cx += (w / 5))
         {
             if (starck[number][(cy - y) / (w / 5)][(cx - x) / (h / 5)])
             {
-                screen.fillRect(cx, cy, w / 5, h / 5, style["number"]["color"]["hex"]["16"].as<uint16_t>());
+                screen.fillRect(cx, cy, w / 5, h / 5, 0xFFFF00);
+                // screen.fillRect(cx, cy, w / 5, h / 5, style["number"]["color"]["hex"]["16"].as<uint16_t>());
             }
         }
     }
@@ -172,5 +174,5 @@ void hexToRgb(char *hex, int &r, int &g, int &b)
 
 uint16_t rgbTo16bits(uint8_t r, uint8_t g, uint8_t b)
 {
-    return (static_cast<uint8_t>((r / 255.0f) * 31.0f + 0.5f) << 11) | (static_cast<uint8_t>((g / 255.0f) * 63.0f + 0.5f) << 5) | static_cast<uint8_t>((b / 255.0f) * 31.0f + 0.5f);
+    return (static_cast<uint16_t>((r / 255.0f) * 31.0f + 0.5f) << 11) | (static_cast<uint16_t>((g / 255.0f) * 63.0f + 0.5f) << 5) | static_cast<uint16_t>((b / 255.0f) * 31.0f + 0.5f);
 }
