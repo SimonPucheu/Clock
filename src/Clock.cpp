@@ -108,7 +108,7 @@ void Clock::setup()
 
 void Clock::drawNumber(int x, int y, int w, int h, int number = 0)
 {
-    Serial.println(style["number"]["color"]["hex"]["16"].as<uint16_t>());
+    // Serial.println(style["number"]["color"]["hex"]["16"].as<uint16_t>());
     for (int cy = y; cy < (y + h); cy += (h / 5))
     {
         for (int cx = x; cx < (x + w); cx += (w / 5))
@@ -158,7 +158,7 @@ void Clock::calculColor(String str)
                 style[str]["color"]["hex"]["24"] = "ff0000";
             }
             int r, g, b;
-            hexToRgb(style[str]["color"]["hex"]["24"].as<char *>(), r, g, b);
+            hexToRgb(style[str]["color"]["hex"]["24"].as<const char*>(), r, g, b);
             style[str]["color"]["rgb"][0] = r;
             style[str]["color"]["rgb"][1] = g;
             style[str]["color"]["rgb"][2] = b;
@@ -167,7 +167,7 @@ void Clock::calculColor(String str)
     }
 }
 
-void hexToRgb(char *hex, int &r, int &g, int &b)
+void hexToRgb(char* hex, int &r, int &g, int &b)
 {
     sscanf(hex, "%02x%02x%02x", &r, &g, &b);
 }
